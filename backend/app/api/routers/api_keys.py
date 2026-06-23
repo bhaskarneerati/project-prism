@@ -33,7 +33,7 @@ async def create_key(
     db: AsyncSession = Depends(get_db),
 ):
     service = ApiKeyService(ApiKeyRepository(db))
-    api_key, raw_key = await service.create_key(current_user.id, payload.name)
+    api_key, raw_key = await service.create_key(current_user.id, payload.name, payload.expires_at)
     return ApiKeyCreatedResponse(
         id=api_key.id,
         name=api_key.name,

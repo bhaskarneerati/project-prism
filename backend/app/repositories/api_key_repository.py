@@ -1,4 +1,5 @@
 import uuid
+from datetime import datetime
 
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -24,8 +25,10 @@ class ApiKeyRepository:
         result = await self.db.execute(select(ApiKey).where(ApiKey.key_hash == key_hash))
         return result.scalar_one_or_none()
 
-    async def create(self, user_id: uuid.UUID, name: str, key_hash: str) -> ApiKey:
-        api_key = ApiKey(user_id=user_id, name=name, key_hash=key_hash)
+    async def create(
+        self, user_id: uuid.UUID, name: str, key_hash: str, expires_at: datetime | None = None
+    ) -> ApiKey:
+        api_key = ApiKey(user_id=user_id, name=name, key_hash=key_hash, expires_at=expires_at)
         self.db.add(api_key)
         await self.db.commit()
         await self.db.refresh(api_key)

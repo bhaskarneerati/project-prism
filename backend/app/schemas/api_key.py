@@ -6,6 +6,7 @@ from pydantic import BaseModel
 
 class CreateApiKeyRequest(BaseModel):
     name: str
+    expires_at: datetime | None = None
 
 
 class UpdateApiKeyRequest(BaseModel):

@@ -1,4 +1,5 @@
 import uuid
+from datetime import datetime
 
 from fastapi import HTTPException, status
 
@@ -11,9 +12,13 @@ class ApiKeyService:
     def __init__(self, api_key_repo: ApiKeyRepository):
         self.api_key_repo = api_key_repo
 
-    async def create_key(self, user_id: uuid.UUID, name: str) -> tuple[ApiKey, str]:
+    async def create_key(
+        self, user_id: uuid.UUID, name: str, expires_at: datetime | None = None
+    ) -> tuple[ApiKey, str]:
         raw_key, key_hash = generate_api_key()
-        api_key = await self.api_key_repo.create(user_id=user_id, name=name, key_hash=key_hash)
+        api_key = await self.api_key_repo.create(
+            user_id=user_id, name=name, key_hash=key_hash, expires_at=expires_at
+        )
         return api_key, raw_key
 
     async def list_keys(self, user_id: uuid.UUID) -> list[ApiKey]:
