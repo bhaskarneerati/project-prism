@@ -45,6 +45,11 @@ async def _increment_quota_usage(user_id) -> None:
             await quota_repo.increment_usage(quota)
 
 
+async def _forward_to_upstream(method: str, url: str, headers: dict, content: bytes):
+    async with httpx.AsyncClient(timeout=10.0) as client:
+        return await client.request(method=method, url=url, headers=headers, content=content)
+
+
 async def _log_rejection(
     db: AsyncSession, api_key_id, slug: str, reason: str, status_code: int, method: str
 ) -> None:
@@ -128,13 +133,9 @@ async def proxy(
 
     start_time = time.monotonic()
     try:
-        async with httpx.AsyncClient(timeout=10.0) as client:
-            upstream_response = await client.request(
-                method=request.method,
-                url=route.target_url,
-                headers=forward_headers,
-                content=body,
-            )
+        upstream_response = await _forward_to_upstream(
+            request.method, route.target_url, forward_headers, body
+        )
     except httpx.TimeoutException:
         raise HTTPException(status_code=status.HTTP_504_GATEWAY_TIMEOUT, detail="Upstream target timed out")
     except httpx.RequestError:

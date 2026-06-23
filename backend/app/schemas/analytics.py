@@ -1,7 +1,7 @@
 import uuid
 from datetime import date, datetime
 
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 
 
 class OverviewResponse(BaseModel):
@@ -30,8 +30,7 @@ class LogEntry(BaseModel):
     status_code: int
     request_method: str
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 class RejectionBreakdownEntry(BaseModel):
