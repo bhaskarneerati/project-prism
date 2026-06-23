@@ -54,7 +54,7 @@ It's a mini [Kong](https://konghq.com/) (the gateway/proxy layer) plus a mini [D
 | Testing | Pytest (+ pytest-asyncio) | Async-native test support matching the async backend |
 | Logging | Structlog (JSON) | Structured, queryable logs with per-request correlation IDs |
 | CI/CD | GitHub Actions | Gate deploys on tests passing |
-| Deployment | Railway | Managed Postgres/Redis + simple git-based deploys for both services |
+| Deployment | Vercel (frontend) + Render (backend) + Neon (Postgres) + Upstash (Redis) | Free-tier-friendly split across managed providers, each specialized for its piece (Vercel for Next.js specifically, Render for Dockerized services, Neon/Upstash as serverless managed DB/cache) |
 
 ## Local Setup
 
@@ -98,8 +98,11 @@ Raw API keys are shown to the user exactly once, at creation time, then only the
 
 ## Screenshots
 
-_Added after deployment. See live demo link below._
+_Add your own screenshots here (dashboard overview, API keys page, analytics charts, logs table)._
 
 ## Live Demo
 
-_Added after deployment to Railway._
+- **Frontend (dashboard):** https://project-prism-eight.vercel.app
+- **Backend (API + docs):** https://project-prism-n8d4.onrender.com/docs
+
+**Deployment stack:** Vercel (frontend) + Render (backend, free tier — note: the free instance spins down after ~15 minutes of inactivity and may take 30-60 seconds to wake up on the first request) + Neon (PostgreSQL) + Upstash (Redis). Backend deploys are gated on the Pytest suite passing, via GitHub Actions calling a Render deploy hook.
