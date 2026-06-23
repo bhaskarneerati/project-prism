@@ -2,12 +2,14 @@ from fastapi import HTTPException, status
 
 from app.core.security import create_access_token, hash_password, verify_password
 from app.db.models.user import User
+from app.repositories.quota_repository import QuotaRepository
 from app.repositories.user_repository import UserRepository
 
 
 class AuthService:
-    def __init__(self, user_repo: UserRepository):
+    def __init__(self, user_repo: UserRepository, quota_repo: QuotaRepository):
         self.user_repo = user_repo
+        self.quota_repo = quota_repo
 
     async def register(self, email: str, password: str) -> User:
         existing = await self.user_repo.get_by_email(email)
@@ -16,7 +18,9 @@ class AuthService:
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail="Email already registered",
             )
-        return await self.user_repo.create(email=email, password_hash=hash_password(password))
+        user = await self.user_repo.create(email=email, password_hash=hash_password(password))
+        await self.quota_repo.create(user_id=user.id)
+        return user
 
     async def login(self, email: str, password: str) -> str:
         user = await self.user_repo.get_by_email(email)
