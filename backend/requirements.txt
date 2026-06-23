@@ -3,9 +3,12 @@ uvicorn[standard]
 sqlalchemy[asyncio]
 asyncpg
 alembic
+psycopg2-binary
 pydantic
 pydantic-settings
+email-validator
 passlib[bcrypt]
+bcrypt==4.0.1
 python-jose[cryptography]
 httpx
 redis[asyncio]
