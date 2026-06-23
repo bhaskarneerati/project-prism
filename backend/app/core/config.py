@@ -10,6 +10,11 @@ class Settings(BaseSettings):
     JWT_SECRET: str
     JWT_EXPIRY_MINUTES: int = 1440
     ENVIRONMENT: str = "development"
+    CORS_ORIGINS: str = "http://localhost:3000"
+
+    @property
+    def cors_origins_list(self) -> list[str]:
+        return [origin.strip() for origin in self.CORS_ORIGINS.split(",") if origin.strip()]
 
 
 settings = Settings()
