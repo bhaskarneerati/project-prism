@@ -24,6 +24,12 @@ def create_access_token(subject: str) -> str:
     return jwt.encode(payload, settings.JWT_SECRET, algorithm="HS256")
 
 
+def create_admin_access_token(email: str) -> str:
+    expire = datetime.now(timezone.utc) + timedelta(minutes=settings.JWT_EXPIRY_MINUTES)
+    payload = {"sub": email, "is_admin": True, "exp": expire}
+    return jwt.encode(payload, settings.JWT_SECRET, algorithm="HS256")
+
+
 def decode_token(token: str) -> dict | None:
     try:
         return jwt.decode(token, settings.JWT_SECRET, algorithms=["HS256"])

@@ -11,6 +11,8 @@ class Settings(BaseSettings):
     JWT_EXPIRY_MINUTES: int = 1440
     ENVIRONMENT: str = "development"
     CORS_ORIGINS: str = "http://localhost:3000"
+    ADMIN_EMAIL: str = "admin@prism.local"
+    ADMIN_PASSWORD: str = "change-this-admin-password"
 
     @property
     def cors_origins_list(self) -> list[str]:

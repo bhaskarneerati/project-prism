@@ -5,7 +5,7 @@ from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.middleware.base import BaseHTTPMiddleware
 
-from app.api.routers import analytics, api_keys, auth, proxy, routes
+from app.api.routers import admin, analytics, api_keys, auth, proxy, routes
 from app.core.config import settings
 from app.core.logging import configure_logging
 
@@ -18,6 +18,7 @@ app.include_router(auth.router, prefix="/v1")
 app.include_router(api_keys.router, prefix="/v1")
 app.include_router(routes.router, prefix="/v1")
 app.include_router(analytics.router, prefix="/v1")
+app.include_router(admin.router, prefix="/v1")
 app.include_router(proxy.router)
 
 app.add_middleware(
