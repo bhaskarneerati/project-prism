@@ -20,6 +20,7 @@ router = APIRouter()
 
 RATE_LIMIT_PER_MINUTE = 60
 HOP_BY_HOP_HEADERS = {"host", "x-api-key", "content-length", "content-encoding", "transfer-encoding"}
+REQUEST_ONLY_STRIPPED_HEADERS = {"accept-encoding"}
 
 
 async def _write_request_log(
@@ -128,8 +129,15 @@ async def proxy(
 
     body = await request.body()
     forward_headers = {
-        k: v for k, v in request.headers.items() if k.lower() not in HOP_BY_HOP_HEADERS
+        k: v
+        for k, v in request.headers.items()
+        if k.lower() not in HOP_BY_HOP_HEADERS and k.lower() not in REQUEST_ONLY_STRIPPED_HEADERS
     }
+    # Explicitly request uncompressed content. httpx injects its own default
+    # Accept-Encoding if none is present in headers, so merely omitting the
+    # client's original header isn't enough to stop the upstream compressing
+    # the response (which we'd otherwise forward as undecoded garbage).
+    forward_headers["Accept-Encoding"] = "identity"
 
     start_time = time.monotonic()
     try:
