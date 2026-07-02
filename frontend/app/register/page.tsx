@@ -25,8 +25,8 @@ export default function RegisterPage() {
       router.push("/login");
     } catch (err: unknown) {
       const message =
-        (err as { response?: { data?: { detail?: string } } })?.response?.data?.detail ||
-        "Registration failed";
+        (err as { response?: { data?: { detail?: string } } })?.response?.data
+          ?.detail || "Registration failed";
       setError(message);
     } finally {
       setLoading(false);
@@ -40,6 +40,9 @@ export default function RegisterPage() {
           <CardTitle className="text-xl text-slate-900 dark:text-slate-50">
             Create your Prism account
           </CardTitle>
+          <p className="mt-2 text-xs text-slate-400 dark:text-slate-500">
+            ⚠️ Hobby project. Use dummy emails and test APIs only.
+          </p>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="flex flex-col gap-4">
@@ -70,7 +73,10 @@ export default function RegisterPage() {
           </form>
           <p className="mt-4 text-sm text-slate-500 dark:text-slate-400">
             Already have an account?{" "}
-            <Link href="/login" className="text-indigo-600 hover:underline dark:text-indigo-400">
+            <Link
+              href="/login"
+              className="text-indigo-600 hover:underline dark:text-indigo-400"
+            >
               Sign in
             </Link>
           </p>

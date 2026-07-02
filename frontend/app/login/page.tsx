@@ -38,6 +38,9 @@ export default function LoginPage() {
           <CardTitle className="text-xl text-slate-900 dark:text-slate-50">
             Sign in to Prism
           </CardTitle>
+          <p className="mt-2 text-xs text-slate-400 dark:text-slate-500">
+            ⚠️ Hobby project. Use dummy emails and test APIs only.
+          </p>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="flex flex-col gap-4">
@@ -68,7 +71,10 @@ export default function LoginPage() {
           </form>
           <p className="mt-4 text-sm text-slate-500 dark:text-slate-400">
             Don&apos;t have an account?{" "}
-            <Link href="/register" className="text-indigo-600 hover:underline dark:text-indigo-400">
+            <Link
+              href="/register"
+              className="text-indigo-600 hover:underline dark:text-indigo-400"
+            >
               Register
             </Link>
           </p>
